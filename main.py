@@ -9,6 +9,7 @@ import abc
 from typing import Type, List
 
 from core import GameState, Snake, Fruit
+from ai import SnakeAI
 from dummy import SnakeAINull, SnakeAIUp
 
 def gameloop(gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit]):
