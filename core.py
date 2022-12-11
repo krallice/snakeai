@@ -16,7 +16,9 @@ class GameState(object):
 
         # Initialise our screen:
         self.screen = curses.initscr()
-        self.screen_height, self.screen_width = self.screen.getmaxyx()
+        # self.screen_height, self.screen_width = self.screen.getmaxyx()
+        self.screen_height = 20
+        self.screen_width = 20
         self.window = curses.newwin(self.screen_height, self.screen_width, 0, 0)
 
         self.window.keypad(1)
@@ -27,8 +29,8 @@ class Snake(object):
     def __init__(self):
 
         # (Y, X) from Origin == Top Left
-        self.head = [15,160]
-        self.body = [[15,160],[15,159],[15,158]]
+        self.head = [15,15]
+        self.body = [[15,15],[15,14],[15,13]]
         self.velocity = [0, 1]
 
     def move(self):
@@ -48,7 +50,7 @@ class Snake(object):
 class Fruit(object):
 
     def __init__(self):
-        self.location = [15,175]
+        self.location = [5,5]
 
     def newlocation(self, snake_positions: List[List], screen_height: int, screen_width: int):
 
