@@ -4,7 +4,7 @@ import random
 import curses
 import time
 
-from abc import ABC
+import abc
 
 from typing import Type, List
 
@@ -61,15 +61,21 @@ class Fruit(object):
                 break
         self.location = candidate_position
 
-class SnakeAI(ABC):
+class SnakeAI(object, metaclass=abc.ABCMeta):
 
+    @abc.abstractmethod
     def emit_output(self, previous_input: int, gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit]) -> int:
-        pass
+        raise NotImplementedError()
 
-class SnakeAINull():
+class SnakeAINull(SnakeAI):
 
     def emit_output(self, previous_input: int, gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit]) -> int:
         return previous_input
+
+class SnakeAIUp(SnakeAI):
+
+    def emit_output(self, previous_input: int, gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit]) -> int:
+        return curses.KEY_UP
 
 def gameloop(gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit]):
 
@@ -81,7 +87,7 @@ def gameloop(gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit])
     prev_button_direction = None
 
     # Init our AI:
-    ai = SnakeAINull()
+    ai = SnakeAIUp()
 
     while True:
 
@@ -90,11 +96,12 @@ def gameloop(gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit])
 
         gamestate.ticks += 1
 
-        next_key = ai.emit_output(key, gamestate, snake, fruit)
+        # AI Input:
+        ai_key = ai.emit_output(key, gamestate, snake, fruit)
 
-        # Get input:
-        next_key = gamestate.window.getch()
-        key = next_key if next_key != -1 else key
+        # Manual input:
+        manual_key = gamestate.window.getch()
+        key = manual_key if manual_key != -1 else ai_key
 
         # Validate input:
         if key == curses.KEY_LEFT and prev_button_direction != curses.KEY_RIGHT:
