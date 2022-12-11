@@ -4,6 +4,8 @@ import random
 import curses
 import time
 
+from abc import ABC
+
 from typing import Type, List
 
 class GameState(object):
@@ -59,6 +61,16 @@ class Fruit(object):
                 break
         self.location = candidate_position
 
+class SnakeAI(ABC):
+
+    def emit_output(self, previous_input: int, gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit]) -> int:
+        pass
+
+class SnakeAINull():
+
+    def emit_output(self, previous_input: int, gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit]) -> int:
+        return previous_input
+
 def gameloop(gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit]):
 
     # Draw Fruit:
@@ -68,12 +80,17 @@ def gameloop(gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit])
     key = curses.KEY_RIGHT
     prev_button_direction = None
 
+    # Init our AI:
+    ai = SnakeAINull()
+
     while True:
 
         gamestate.window.border(0)
         gamestate.window.timeout(100)
 
         gamestate.ticks += 1
+
+        next_key = ai.emit_output(key, gamestate, snake, fruit)
 
         # Get input:
         next_key = gamestate.window.getch()
