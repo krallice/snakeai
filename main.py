@@ -10,6 +10,7 @@ class GameState(object):
 
     def __init__(self):
         self.score = 0
+        self.ticks = 0
 
     def init_screen(self):
 
@@ -71,6 +72,8 @@ def gameloop(gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit])
 
         gamestate.window.border(0)
         gamestate.window.timeout(100)
+
+        gamestate.ticks += 1
 
         # Get input:
         next_key = gamestate.window.getch()
@@ -139,6 +142,11 @@ def main():
     # Cleanup:
     gamestate.screen.refresh()
     curses.endwin()
+
+    # Stats:
+    print("Score: {}".format(gamestate.score))
+    print("Snake Length: {}".format(len(snake.body)))
+    print("TickCount: {}".format(gamestate.ticks))
 
 if __name__ == '__main__':
     main()
