@@ -11,10 +11,16 @@ from core import GameState, Snake, Fruit
 
 class SnakeAINull(SnakeAI):
 
+    def __str__(self):
+        return 'Null'
+
     def emit_output(self, previous_input: int, gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit]) -> int:
         return previous_input
 
 class SnakeAIUp(SnakeAI):
+
+    def __str__(self):
+        return 'Unconditional UP'
 
     def emit_output(self, previous_input: int, gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit]) -> int:
         return curses.KEY_UP
@@ -27,8 +33,11 @@ class SnakeAIDirect(SnakeAI):
     the snake pivots to solve for Y.
 
     No collision detection logic.
-    
+
     """
+
+    def __str__(self):
+        return 'Direct Path Solver'
 
     def emit_output(self, previous_input: int, gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit]) -> int:
         
