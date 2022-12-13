@@ -11,7 +11,7 @@ from typing import Type, List
 
 from core import GameState, Snake, Fruit
 from ai import SnakeAI
-from dummy import SnakeAINull, SnakeAIUp
+from dummy import SnakeAINull, SnakeAIUp, SnakeAIDirect
 
 def gameloop(gamestate: Type[GameState], ai: Type[SnakeAI], snake: Type[Snake], fruit: Type[Fruit]):
 
@@ -92,12 +92,12 @@ def main():
     fruit = Fruit()
 
     # Init our AI:
-    ai_mapping = { "up": SnakeAIUp, "null": SnakeAINull}
+    ai_mapping = { "up": SnakeAIUp, "null": SnakeAINull, "direct": SnakeAIDirect}
     try:
         ai = ai_mapping[sys.argv[1]]() 
     except:
         ai = SnakeAINull()
-        
+
     # Setup curses:
     gamestate.init_screen()
 
