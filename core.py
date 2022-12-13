@@ -24,6 +24,12 @@ class GameState(object):
         self.window.keypad(1)
         curses.curs_set(0)
 
+    def cleanup(self):
+
+        self.screen.refresh()
+        curses.endwin()
+
+
 class Snake(object):
 
     def __init__(self):

@@ -3,6 +3,7 @@
 import random
 import curses
 import time
+import sys
 
 import abc
 
@@ -12,7 +13,7 @@ from core import GameState, Snake, Fruit
 from ai import SnakeAI
 from dummy import SnakeAINull, SnakeAIUp
 
-def gameloop(gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit]):
+def gameloop(gamestate: Type[GameState], ai: Type[SnakeAI], snake: Type[Snake], fruit: Type[Fruit]):
 
     # Draw Fruit:
     gamestate.window.addch(fruit.location[0], fruit.location[1], curses.ACS_DIAMOND)
@@ -20,9 +21,6 @@ def gameloop(gamestate: Type[GameState], snake: Type[Snake], fruit: Type[Fruit])
     lastpos = []
     key = curses.KEY_RIGHT
     prev_button_direction = None
-
-    # Init our AI:
-    ai = SnakeAIUp()
 
     while True:
 
@@ -93,14 +91,20 @@ def main():
     snake = Snake()
     fruit = Fruit()
 
+    # Init our AI:
+    ai_mapping = { "up": SnakeAIUp, "null": SnakeAINull}
+    try:
+        ai = ai_mapping[sys.argv[1]]() 
+    except:
+        ai = SnakeAINull()
+        
     # Setup curses:
     gamestate.init_screen()
 
-    gameloop(gamestate, snake, fruit)
+    gameloop(gamestate, ai, snake, fruit)
 
     # Cleanup:
-    gamestate.screen.refresh()
-    curses.endwin()
+    gamestate.cleanup()
 
     # Stats:
     print("Score: {}".format(gamestate.score))
