@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 from core import GameState, Snake, Fruit
 from ai import SnakeAI
 from dummy import SnakeAINull, SnakeAIUp, SnakeAIDirect
+from graph import SnakeAIBFS
 
 def gameloop(gamestate: Type[GameState], ai: Type[SnakeAI], snake: Type[Snake], fruit: Type[Fruit], visualise: bool):
 
@@ -92,7 +93,7 @@ def gameloop(gamestate: Type[GameState], ai: Type[SnakeAI], snake: Type[Snake], 
             break
 
 def map_ai() -> Type[SnakeAI]:
-    ai_mapping = { "up": SnakeAIUp, "null": SnakeAINull, "direct": SnakeAIDirect}
+    ai_mapping = { "up": SnakeAIUp, "null": SnakeAINull, "direct": SnakeAIDirect, "bfs": SnakeAIBFS}
     try:
         ai = ai_mapping[sys.argv[1]]() 
     except:
@@ -124,7 +125,7 @@ def main():
 
 def batch_play():
 
-    run_count = 100000
+    run_count = 100
     run_stats = []
     for n in range(1, run_count):
 
@@ -169,5 +170,5 @@ def batch_play():
 
 
 if __name__ == '__main__':
-    #main()
-    batch_play()
+    main()
+    #batch_play()
