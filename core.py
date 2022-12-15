@@ -12,17 +12,21 @@ class GameState(object):
         self.score = 0
         self.ticks = 0
 
-    def init_screen(self):
+    def init_screen(self, visualise: bool):
 
         # Initialise our screen:
-        self.screen = curses.initscr()
-        # self.screen_height, self.screen_width = self.screen.getmaxyx()
-        self.screen_height = 20
-        self.screen_width = 20
-        self.window = curses.newwin(self.screen_height, self.screen_width, 0, 0)
-
-        self.window.keypad(1)
-        curses.curs_set(0)
+        if visualise == False:
+            self.screen_height = 20
+            self.screen_width = 20
+            return
+        else:
+            self.screen = curses.initscr()
+            # self.screen_height, self.screen_width = self.screen.getmaxyx()
+            self.screen_height = 20
+            self.screen_width = 20
+            self.window = curses.newwin(self.screen_height, self.screen_width, 0, 0)
+            self.window.keypad(1)
+            curses.curs_set(0)
 
     def cleanup(self):
 

@@ -20,17 +20,19 @@ from graph import SnakeAIBFS
 
 def gameloop(gamestate: Type[GameState], ai: Type[SnakeAI], snake: Type[Snake], fruit: Type[Fruit], visualise: bool):
 
-    # Draw Fruit:
-    gamestate.window.addch(fruit.location[0], fruit.location[1], curses.ACS_DIAMOND)
-
     lastpos = []
     key = curses.KEY_RIGHT
     prev_button_direction = None
 
-    while True:
+    # Draw Fruit:
+    if visualise == True:
+        gamestate.window.addch(fruit.location[0], fruit.location[1], curses.ACS_DIAMOND)
 
+    if visualise == True:
         gamestate.window.border(0)
         gamestate.window.timeout(100)
+
+    while True:
 
         gamestate.ticks += 1
 
@@ -74,14 +76,17 @@ def gameloop(gamestate: Type[GameState], ai: Type[SnakeAI], snake: Type[Snake], 
         if ((snake.head[0] == fruit.location[0]) and (snake.head[1] == fruit.location[1])):
             gamestate.score += 1
             fruit.newlocation(snake.body, gamestate.screen_height, gamestate.screen_width)
-            gamestate.window.addch(fruit.location[0], fruit.location[1], curses.ACS_DIAMOND)
+            if visualise == True:
+                gamestate.window.addch(fruit.location[0], fruit.location[1], curses.ACS_DIAMOND)
         else:
             # Shift the snake along:
             lastpos = snake.shuffle_tail()
-            gamestate.window.addch(lastpos[0], lastpos[1], ' ')
+            if visualise == True:
+                gamestate.window.addch(lastpos[0], lastpos[1], ' ')
 
         # Render the snake:
-        gamestate.window.addch(snake.body[0][0], snake.body[0][1], '#')
+        if visualise == True:
+            gamestate.window.addch(snake.body[0][0], snake.body[0][1], '#')
 
         # Collision detection on the boundary:
         if  (snake.head[1] >= (gamestate.screen_width - 1)) or (snake.head[1] <= 0) or \
@@ -127,6 +132,11 @@ def batch_play():
 
     run_count = 100
     run_stats = []
+
+    # Init our AI:
+    ai = map_ai()
+    
+    # Run Games:
     for n in range(1, run_count):
 
         # Init our data:
@@ -134,16 +144,12 @@ def batch_play():
         snake = Snake()
         fruit = Fruit()
 
-        # Init our AI:
-        ai = map_ai()
-
         # Setup curses:
-        gamestate.init_screen()
+        gamestate.init_screen(False)
         gameloop(gamestate, ai, snake, fruit, False)
         run_stats.append({"Score": gamestate.score, "Ticks": gamestate.ticks})
     
-    gamestate.cleanup()
-
+    # Games finished, print summary:
     print(f"AI: {ai}\nRuns: {run_count}")
     print(f"- - -")
 
@@ -168,7 +174,6 @@ def batch_play():
     plt.xlabel("Game Score")
     plt.savefig('x.png')
 
-
 if __name__ == '__main__':
-    main()
-    #batch_play()
+    # main()
+    batch_play()
