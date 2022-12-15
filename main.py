@@ -116,7 +116,7 @@ def main():
     ai = map_ai()
 
     # Setup curses:
-    gamestate.init_screen()
+    gamestate.init_screen(True)
 
     gameloop(gamestate, ai, snake, fruit, True)
 
@@ -130,7 +130,7 @@ def main():
 
 def batch_play():
 
-    run_count = 100
+    run_count = 1000
     run_stats = []
 
     # Init our AI:
@@ -175,5 +175,5 @@ def batch_play():
     plt.savefig('x.png')
 
 if __name__ == '__main__':
-    # main()
-    batch_play()
+    main()
+    # batch_play()
